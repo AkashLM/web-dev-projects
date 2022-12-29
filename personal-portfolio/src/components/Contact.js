@@ -1,47 +1,32 @@
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import contactImg from "../assets/img/contact-img.svg";
+import contactImg from "../assets/img/contact-new.png";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
 
 export const Contact = () => {
-  const formInitialDetails = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    message: ''
-  }
-  const [formDetails, setFormDetails] = useState(formInitialDetails);
-  const [buttonText, setButtonText] = useState('Send');
-  const [status, setStatus] = useState({});
 
-  const onFormUpdate = (category, value) => {
-      setFormDetails({
-        ...formDetails,
-        [category]: value
-      })
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setButtonText("Sending...");
-    let response = await fetch("http://localhost:5000/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(formDetails),
-    });
-    setButtonText("Send");
-    let result = await response.json();
-    setFormDetails(formInitialDetails);
-    if (result.code == 200) {
-      setStatus({ succes: true, message: 'Message sent successfully'});
-    } else {
-      setStatus({ succes: false, message: 'Something went wrong, please try again later.'});
+  const [formState, setFormState]=useState({});
+    const changeHandler= (event)=>{
+      setFormState({...formState,[event.target.name]:event.target.value});
     }
-  };
+    console.log(formState);
+
+    const submitHandler=(event)=>{
+      event.preventDefault();
+      const config={
+        SecureToken:"0c136aea-624e-4c73-b477-e9593f76301e",
+        To : 'malekarakash70@gmail.com',
+        From : formState.email,
+        Subject : "Connect with me request ",
+        Body : `${formState.fname},${formState.lname}, want to connect with you. Message: ${formState.message}`,
+    }
+
+      if(window.Email){
+        window.Email.send(config).then(()=> alert("Email send successfully !"));
+      }
+    }
+
 
   return (
     <section className="contact" id="connect">
@@ -59,30 +44,24 @@ export const Contact = () => {
               {({ isVisible }) =>
                 <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
                 <h2>Get In Touch</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={submitHandler}>
                   <Row>
                     <Col size={12} sm={6} className="px-1">
-                      <input type="text" value={formDetails.firstName} placeholder="First Name" onChange={(e) => onFormUpdate('firstName', e.target.value)} />
+                      <input style={{borderRadius:"5px"}} type="text" name="fname" value={formState.fname || ""} placeholder="First Name" onChange={changeHandler} />
                     </Col>
                     <Col size={12} sm={6} className="px-1">
-                      <input type="text" value={formDetails.lasttName} placeholder="Last Name" onChange={(e) => onFormUpdate('lastName', e.target.value)}/>
+                      <input type="text" style={{borderRadius:"5px"}} name="lname" value={formState.lname || ""} placeholder="Last Name" onChange={changeHandler}/>
                     </Col>
                     <Col size={12} sm={6} className="px-1">
-                      <input type="email" value={formDetails.email} placeholder="Email Address" onChange={(e) => onFormUpdate('email', e.target.value)} />
+                      <input type="email" style={{borderRadius:"5px"}} name="email" value={formState.email || ""} placeholder="Email Address" onChange={changeHandler} />
                     </Col>
                     <Col size={12} sm={6} className="px-1">
-                      <input type="tel" value={formDetails.phone} placeholder="Phone No." onChange={(e) => onFormUpdate('phone', e.target.value)}/>
+                      <input type="tel" style={{borderRadius:"5px"}} name="phone" value={formState.phone || ""} placeholder="Contact No." onChange={changeHandler}/>
                     </Col>
                     <Col size={12} className="px-1">
-                      <textarea rows="6" value={formDetails.message} placeholder="Message" onChange={(e) => onFormUpdate('message', e.target.value)}></textarea>
-                      <button type="submit"><span>{buttonText}</span></button>
+                      <textarea style={{borderRadius:"5px"}} rows="6" name="message" value={formState.message || ""} placeholder="Message" onChange={changeHandler}></textarea>
+                      <button style={{borderRadius:"5px"}} type="submit"><span>Submit</span></button>
                     </Col>
-                    {
-                      status.message &&
-                      <Col>
-                        <p className={status.success === false ? "danger" : "success"}>{status.message}</p>
-                      </Col>
-                    }
                   </Row>
                 </form>
               </div>}

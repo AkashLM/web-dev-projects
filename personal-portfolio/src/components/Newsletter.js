@@ -23,19 +23,19 @@ export const Newsletter = ({ status, message, onValidated }) => {
 
   return (
       <Col lg={12}>
-        <div className="newsletter-bx wow slideInUp">
+        <div className="newsletter-bx wow slideInUp" style={{borderRadius:"5px"}}>
           <Row>
             <Col lg={12} md={6} xl={5}>
-              <h3>Subscribe to our Newsletter<br></br> & Never miss latest updates</h3>
+              <h3>Subscribe to read my<br></br> latest Blogs &  Updates.</h3>
               {status === 'sending' && <Alert>Sending...</Alert>}
               {status === 'error' && <Alert variant="danger">{message}</Alert>}
               {status === 'success' && <Alert variant="success">{message}</Alert>}
             </Col>
             <Col md={6} xl={7}>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} >
                 <div className="new-email-bx">
-                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" />
-                  <button type="submit">Submit</button>
+                  <input value={email} type="email" style={{color:"grey"}} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" />
+                  <button type="submit" style={{borderRadius:"0px 15px 15px 0px"}} onClick={()=>{alert("Currently unavailable. Kindly mail to malekarakash70@gmail.com for any queries.Thank you !")}}>Submit</button>
                 </div>
               </form>
             </Col>
